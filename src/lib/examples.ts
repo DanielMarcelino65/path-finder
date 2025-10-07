@@ -1,7 +1,7 @@
 // app/lib/examples.ts
 export const examples: Array<[string, string[]]> = [
   [
-    'Ex1 simples',
+    '🟢 Simples',
     [
       '..........',
       '.S........',
@@ -12,11 +12,11 @@ export const examples: Array<[string, string[]]> = [
     ],
   ],
   [
-    'Ex2 corredor',
+    '🟢 Corredor',
     ['S####.....', '....#.....', '#######.##', '.....#...G', '.....#####'],
   ],
   [
-    'Ex3 heurística enganosa',
+    '🟢 Heurística enganosa',
     [
       'S.....#####................',
       '#####.#####.##############.',
@@ -26,7 +26,7 @@ export const examples: Array<[string, string[]]> = [
     ],
   ],
   [
-    'Ex4 becos',
+    '🟢 Becos',
     [
       'S..#..#..#..#..#..#..#..#G',
       '##.#..#..#..#..#..#..#..##',
@@ -37,7 +37,7 @@ export const examples: Array<[string, string[]]> = [
   ],
   // Ex5: pseudo-aleatória (fixa) — mesma ideia do Python
   [
-    'Ex5 grande aleatória',
+    '🟢 Grande aleatória',
     (() => {
       const rows = 20,
         cols = 35;

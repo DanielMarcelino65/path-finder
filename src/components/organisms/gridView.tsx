@@ -1,8 +1,6 @@
-// app/components/GridView.tsx
 'use client';
-import React, { use, useEffect } from 'react';
+import React from 'react';
 import type { Grid, Point } from '@/lib/algorithms';
-import { cn } from '@/lib/utils';
 
 const cellColors = {
   obstaculo: '#111',
@@ -38,19 +36,16 @@ export default function GridView({
   const [maxWidthCaption, setMaxWidthCaption] = React.useState(0);
 
   React.useEffect(() => {
-    const captionWidth = gridRef.current?.offsetWidth || 0;
-    console.log('captionWidth', captionWidth);
-    setMaxWidthCaption(captionWidth);
-  }, [grid]);
+    const el = gridRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setMaxWidthCaption(el.offsetWidth));
+    ro.observe(el);
+    setMaxWidthCaption(el.offsetWidth);
+    return () => ro.disconnect();
+  }, []);
   const frontierSet = new Set(frontier.map((p) => `${p[0]},${p[1]}`));
   const visitedSet = new Set(visited.map((p) => `${p[0]},${p[1]}`));
   const pathSet = new Set((path ?? []).map((p) => `${p[0]},${p[1]}`));
-  //Verificar se a celula visitada é igual a uma celula do caminho
-  visited.forEach((cell) => {
-    if (pathSet.has(`${cell[0]},${cell[1]}`)) {
-      console.log(`Célula visitada ${cell} está no caminho`);
-    }
-  });
 
   return (
     <>
