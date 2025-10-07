@@ -213,15 +213,15 @@ export default function Page() {
             >
               Reiniciar
             </Button>
-            <div className="flex items-center">
-              <Switch
-                checked={showOptimalPath}
-                onCheckedChange={setShowOptimalPath}
-              />
-              <Label className="ml-2 select-none text-sm">
-                Mostrar caminho ótimo (BFS)
-              </Label>
-            </div>
+          </div>
+          <div className="flex items-center">
+            <Switch
+              checked={showOptimalPath}
+              onCheckedChange={setShowOptimalPath}
+            />
+            <Label className="ml-2 select-none text-sm">
+              Mostrar caminho ótimo (BFS)
+            </Label>
           </div>
 
           <div className="flex gap-10 flex-wrap items-start">

@@ -38,7 +38,6 @@ export default function CaseEditorDialog({
   const [cellSize, setCellSize] = React.useState(22);
   const [isDrawing, setIsDrawing] = React.useState(false);
 
-  // redimensiona mantendo o que for possível
   React.useEffect(() => {
     setGrid((prev) => resizeGrid(prev, rows, cols));
     setStart(([r, c]) => [Math.min(r, rows - 1), Math.min(c, cols - 1)]);
@@ -87,79 +86,18 @@ export default function CaseEditorDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      {/* limite de altura do dialog e layout em coluna */}
+      {/* max height + coluna principal */}
       <DialogContent className="max-w-[min(1000px,95vw)] max-h-[90vh] flex flex-col overflow-hidden">
         <DialogHeader>
           <DialogTitle>Novo caso (desenhe seu mapa)</DialogTitle>
         </DialogHeader>
 
-        {/* área de conteúdo com rolagem apenas no grid */}
-        <div className="flex-1 min-h-0 flex flex-col gap-4 p-1 sm:p-2">
-          {/* controles superiores (fixos) */}
-          <div className="flex flex-wrap gap-4 items-end">
-            <div className="flex flex-col gap-2">
-              <Label>Nome</Label>
-              <Input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Ex.: Labirinto 1"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label>Linhas: {rows}</Label>
-              <Slider
-                min={5}
-                max={60}
-                step={1}
-                value={[rows]}
-                onValueChange={(v) => setRows(v[0])}
-                className="w-56"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label>Colunas: {cols}</Label>
-              <Slider
-                min={5}
-                max={90}
-                step={1}
-                value={[cols]}
-                onValueChange={(v) => setCols(v[0])}
-                className="w-56"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label>Tamanho célula: {cellSize}px</Label>
-              <Slider
-                min={12}
-                max={32}
-                step={1}
-                value={[cellSize]}
-                onValueChange={(v) => setCellSize(v[0])}
-                className="w-48"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label>Ferramenta</Label>
-              <ToggleGroup
-                type="single"
-                value={brush}
-                onValueChange={(v) => v && setBrush(v as Brush)}
-              >
-                <ToggleGroupItem value="wall">Pintar muro</ToggleGroupItem>
-                <ToggleGroupItem value="erase">Apagar</ToggleGroupItem>
-                <ToggleGroupItem value="start">Início (S)</ToggleGroupItem>
-                <ToggleGroupItem value="goal">Objetivo (G)</ToggleGroupItem>
-              </ToggleGroup>
-            </div>
-          </div>
-
-          {/* WRAPPER rolável do grid */}
+        {/* CONTEÚDO: row em md+, column em telas pequenas */}
+        <div className="flex-1 min-h-0 flex flex-col md:flex-row gap-4 p-1 sm:p-2">
+          {/* ESQUERDA: GRID (rolável) */}
           <div
             className="flex-1 min-h-0 overflow-auto rounded-lg border p-2"
-            style={{ maxHeight: '60vh' }}
+            style={{ maxHeight: '65vh' }}
             onPointerUp={handlePointerUp}
           >
             <div
@@ -199,11 +137,72 @@ export default function CaseEditorDialog({
             </div>
           </div>
 
-          {/* legenda rápida */}
-          <div className="text-xs text-muted-foreground">
-            Clique ou arraste para pintar obstáculos (muro). Troque a ferramenta
-            para definir Início (S) e Objetivo (G).
-          </div>
+          {/* DIREITA: CONTROLES (sidebar) */}
+          <aside className="w-full md:w-[320px] flex-shrink-0">
+            <div className="sticky md:top-0 space-y-4 max-h-[65vh] overflow-auto pr-1">
+              <div className="flex flex-col gap-2">
+                <Label>Nome</Label>
+                <Input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Ex.: Labirinto 1"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <Label>Linhas: {rows}</Label>
+                <Slider
+                  min={5}
+                  max={60}
+                  step={1}
+                  value={[rows]}
+                  onValueChange={(v) => setRows(v[0])}
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <Label>Colunas: {cols}</Label>
+                <Slider
+                  min={5}
+                  max={90}
+                  step={1}
+                  value={[cols]}
+                  onValueChange={(v) => setCols(v[0])}
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <Label>Tamanho célula: {cellSize}px</Label>
+                <Slider
+                  min={12}
+                  max={32}
+                  step={1}
+                  value={[cellSize]}
+                  onValueChange={(v) => setCellSize(v[0])}
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <Label>Ferramenta</Label>
+                <ToggleGroup
+                  type="single"
+                  value={brush}
+                  onValueChange={(v) => v && setBrush(v as Brush)}
+                  className="flex flex-wrap gap-2"
+                >
+                  <ToggleGroupItem value="wall">Pintar muro</ToggleGroupItem>
+                  <ToggleGroupItem value="erase">Apagar</ToggleGroupItem>
+                  <ToggleGroupItem value="start">Início (S)</ToggleGroupItem>
+                  <ToggleGroupItem value="goal">Objetivo (G)</ToggleGroupItem>
+                </ToggleGroup>
+              </div>
+
+              <div className="text-xs text-muted-foreground">
+                Clique ou arraste para pintar obstáculos. Use as ferramentas
+                para definir Início (S) e Objetivo (G).
+              </div>
+            </div>
+          </aside>
         </div>
 
         {/* rodapé sempre acessível */}
