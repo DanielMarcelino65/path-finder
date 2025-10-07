@@ -71,7 +71,6 @@ export default function Page() {
 
   const step = result?.steps?.[frame];
 
-  // extra: comparar com BFS (ótimo)
   const optimal = useMemo(
     () => bfsShortestPath(grid, start, goal),
     [grid, start, goal]
@@ -81,8 +80,6 @@ export default function Page() {
   const greenProgressive = useMemo(() => {
     if (!optimal) return null;
     if (!step || !optimal.path?.length) return null;
-
-    const optimalSet = new Set(optimal.path.map(k));
 
     const visitedNow = new Set((step.visitedOrPopped ?? []).map(k));
 
@@ -159,7 +156,7 @@ export default function Page() {
 
         <Button
           onClick={() => setFrame(0)}
-          className="px-3 py-1 rounded border"
+          className="px-3 bg-white text-black py-1 rounded border"
         >
           Reiniciar
         </Button>
@@ -221,12 +218,6 @@ export default function Page() {
               </b>
             </li>
           </ul>
-          {/* <p className="mt-3 text-gray-500">
-            Dica: Greedy prioriza apenas h(n) e não garante ótimo; A* combina
-            g(n)+h(n) (ótimo com heurística admissível).
-            :contentReference[oaicite:18]{(index = 18)}{' '}
-            :contentReference[oaicite:19]{(index = 19)}
-          </p> */}
         </div>
       </div>
     </main>
