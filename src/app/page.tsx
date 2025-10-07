@@ -116,9 +116,7 @@ export default function Page() {
   };
 
   const handleSaveCase = (name: string, lines: string[]) => {
-    const c = addCase({ name, lines });
-    // selecionar o novo: ele entra no começo do array de `userCases`
-    // portanto, seu índice de render = examples.length + 0
+    addCase({ name, lines });
     setCaseIdx(examples.length + 0);
   };
 
@@ -137,7 +135,7 @@ export default function Page() {
       if (visitedNow.has(k(p))) greens.push(p);
     }
     return greens;
-  }, [step, optimal.path]);
+  }, [step, optimal]);
 
   const lastFrame = (result?.steps?.length ?? 1) - 1;
   const completed = !!result?.steps && frame >= lastFrame;

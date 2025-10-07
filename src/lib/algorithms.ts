@@ -150,8 +150,8 @@ export function bfsShortestPath(
     if (cur[0] === goal[0] && cur[1] === goal[1]) {
       // reconstruct
       const path: [number, number][] = [];
-      let curk = k(goal),
-        sk = k(start);
+      let curk = k(goal);
+      const sk = k(start);
       if (!cameFrom[curk] && curk !== sk) return { path: [start], distance: 0 };
       while (curk !== sk) {
         path.push(unkey(curk));
@@ -217,7 +217,7 @@ export function astar(
 
   while (pq.size()) {
     frontier_peak = Math.max(frontier_peak, pq.size());
-    const { f: _f, h: _h, tie: _t, p: cur } = pq.pop()!;
+    const { p: cur } = pq.pop()!;
     const ck = key(cur);
     if (visitedPopped.has(ck)) {
       record(cur);
