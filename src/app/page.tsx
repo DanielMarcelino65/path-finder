@@ -13,6 +13,7 @@ import {
   astar,
   greedyBestFirst,
   bfsShortestPath,
+  manhattan,
 } from '@/lib/algorithms';
 import { examples } from '@/lib/examples';
 import Button from '@/components/atoms/Button';
@@ -39,6 +40,7 @@ export default function Page() {
   const [frame, setFrame] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [result, setResult] = useState<ReturnType<typeof astar> | null>(null);
+  const [showHeuristic, setShowHeuristic] = useState(false);
 
   const mergedList = useMemo(() => {
     // builtins
@@ -69,6 +71,24 @@ export default function Page() {
     () => asIntGridFromLines(lines),
     [lines]
   );
+
+  const hGrid = useMemo(() => {
+    const rows = grid.length,
+      cols = grid[0].length;
+    const out: (number | null)[][] = Array.from({ length: rows }, () =>
+      Array(cols).fill(null)
+    );
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        if (grid[r][c] === 1) {
+          out[r][c] = null;
+          continue;
+        }
+        out[r][c] = manhattan([r, c], goal);
+      }
+    }
+    return out;
+  }, [grid, goal]);
 
   // roda o solver quando muda caso/alg
   useEffect(() => {
@@ -212,14 +232,25 @@ export default function Page() {
               Reiniciar
             </Button>
           </div>
-          <div className="flex items-center">
-            <Switch
-              checked={showOptimalPath}
-              onCheckedChange={setShowOptimalPath}
-            />
-            <Label className="ml-2 select-none text-sm">
-              Mostrar caminho ótimo (BFS)
-            </Label>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center">
+              <Switch
+                checked={showOptimalPath}
+                onCheckedChange={setShowOptimalPath}
+              />
+              <Label className="ml-2 select-none text-sm">
+                Mostrar caminho ótimo (BFS)
+              </Label>
+            </div>
+            <div className="flex items-center">
+              <Switch
+                checked={showHeuristic}
+                onCheckedChange={setShowHeuristic}
+              />
+              <Label className="ml-2 select-none text-sm">
+                Mostrar h(n) (Manhattan)
+              </Label>
+            </div>
           </div>
 
           <div className="flex gap-10 flex-wrap items-start">
@@ -229,6 +260,7 @@ export default function Page() {
                 start={start}
                 goal={goal}
                 frontier={step?.frontier}
+                heuristics={showHeuristic ? hGrid : undefined}
                 visited={step?.visitedOrPopped}
                 path={showOptimalPath ? optimal.path : pathForGrid}
                 cellSize={20}
